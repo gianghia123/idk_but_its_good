@@ -4,5 +4,6 @@ lib64
 include/
 share/
 output/
+playlist/
 pyvenv.cfg
-cookie*
+options
