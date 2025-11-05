@@ -12,6 +12,8 @@ if res.fetchone() is None:
 
 music_path = Path("./output")
 for song_path in music_path.iterdir():
+    if song_path.is_dir():
+        continue
     song = ID3(song_path)
     song_url = song["TXXX:comment"].text[0]
     song_id = urlparse(song_url).query.split('=')[1]
