@@ -107,5 +107,5 @@ def download(url):
 with ThreadPoolExecutor(max_workers = 20) as executor:
     futures = executor.map(download, URLs)
 
-# os.execl("python3", "/home/supperman/Music/idk_but_its_good/create_database.py")
 conn.close()
+os.execl("python3", "/home/supperman/Music/idk_but_its_good/create_database.py")
