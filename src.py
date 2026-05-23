@@ -34,29 +34,27 @@ print(len(URLs))
 ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': {
-        'default': './output/%(title)s.%(ext)s',
-        'pl_thumbnail': ''
+        'default': '%(fulltitle)s.%(ext)s'
     },
     'ignoreerrors': 'only_download',
     'retries': 10,
     'fragment_retries': 10,
     'cookiefile': './cookies.txt',
     'extract_flat': 'discard_in_playlist',
-    'final_ext': 'wav',
     'postprocessors': [
         {
             'key': 'SponsorBlock',
             'categories': {
-                'music_offtopic', 'hook', 'preview',
-                'interaction', 'filler', 'sponsor',
-                'outro', 'intro', 'selfpromo'
+                'preview', 'intro', 'outro',
+                'filler', 'sponsor', 'hook',
+                'music_offtopic', 'selfpromo', 'interaction'
             },
             'api': 'https://sponsor.ajay.app',
             'when': 'after_filter'
         },
         {
             'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'wav',
+            'preferredcodec': 'best',
             'preferredquality': '3--embed-thumbnail',
             'nopostoverwrites': False
         },
@@ -64,9 +62,9 @@ ydl_opts = {
             'key': 'ModifyChapters',
             'remove_chapters_patterns': [],
             'remove_sponsor_segments': {
-                'music_offtopic', 'hook', 'preview',
-                'interaction', 'filler', 'sponsor',
-                'outro', 'intro', 'selfpromo'
+                'preview', 'intro', 'outro',
+                'filler', 'sponsor', 'hook',
+                'music_offtopic', 'selfpromo', 'interaction'
             },
             'remove_ranges': [],
             'sponsorblock_chapter_title': '[SponsorBlock]: %(category_names)l',
@@ -85,6 +83,7 @@ ydl_opts = {
         }
     ]
 }
+
 downloaded = []
 
 
