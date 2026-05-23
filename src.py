@@ -37,50 +37,41 @@ ydl_opts = {
         'default': './output/%(title)s.%(ext)s',
         'pl_thumbnail': ''
     },
-    'cookiefile': './cookies.txt',
     'ignoreerrors': 'only_download',
     'retries': 10,
     'fragment_retries': 10,
     'cookiefile': './cookies.txt',
-    'writethumbnail': True,
     'extract_flat': 'discard_in_playlist',
-    'final_ext': 'mp3',
+    'final_ext': 'wav',
     'postprocessors': [
         {
             'key': 'SponsorBlock',
             'categories': {
-                'music_offtopic',
-                'interaction',
-                'selfpromo',
-                'sponsor',
-                'outro',
-                'intro',
-                'preview'
+                'music_offtopic', 'hook', 'preview',
+                'interaction', 'filler', 'sponsor',
+                'outro', 'intro', 'selfpromo'
             },
             'api': 'https://sponsor.ajay.app',
             'when': 'after_filter'
         },
         {
             'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '5',
+            'preferredcodec': 'wav',
+            'preferredquality': '3--embed-thumbnail',
             'nopostoverwrites': False
         },
         {
             'key': 'ModifyChapters',
             'remove_chapters_patterns': [],
             'remove_sponsor_segments': {
-                'interaction',
-                'selfpromo',
-                'intro',
-                'outro',
-                'preview',
-                'music_offtopic',
-                'sponsor'
+                'music_offtopic', 'hook', 'preview',
+                'interaction', 'filler', 'sponsor',
+                'outro', 'intro', 'selfpromo'
             },
             'remove_ranges': [],
             'sponsorblock_chapter_title': '[SponsorBlock]: %(category_names)l',
-            'force_keyframes': False},
+            'force_keyframes': False
+        },
         {
             'key': 'FFmpegMetadata',
             'add_chapters': True,
@@ -88,29 +79,19 @@ ydl_opts = {
             'add_infojson': 'if_exists'
         },
         {
-            'key': 'EmbedThumbnail',
-            'already_have_thumbnail': False
-        },
-        {
             'key': 'FFmpegConcat',
             'only_multi_video': True,
             'when': 'playlist'
         }
-    ],
-    'remote_components': ['ejs:github']
+    ]
 }
-
 downloaded = []
 
 
 def download(url):
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         error_code = ydl.download(url)
-    if error_code:
-        song_id = urlparse(url).query.split("=")[1]
-        cur.execute("INSERT INTO errors VALUE (?, ?)", (song_id, url))
-        conn.commit()
-    else:
+    if error_code is None:
         downloaded.append(url)
     print("[+] Sleep...")
     sleep(60)
