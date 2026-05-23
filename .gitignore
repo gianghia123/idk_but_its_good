@@ -8,3 +8,4 @@ playlist/
 pyvenv.cfg
 options
 new_url.txt
+songs.sqlite
